@@ -7,6 +7,7 @@ const concat = require('gulp-concat');
 const changed = require('gulp-changed');
 const browserSync = require('browser-sync').create();
 const sass = require('gulp-sass')(require('sass'));
+const sourcemaps = require('gulp-sourcemaps');
 // const uglify = require('gulp-uglify');
 
 // watch files
@@ -58,12 +59,14 @@ const vendorFonts = function() {
 // JS
 const js = function() {
   return gulp.src(javascriptWatchFiles)
+    .pipe(sourcemaps.init())
     .pipe(changed(javascriptWatchFiles))
     .pipe(concat('bundle.js'))
     // .pipe(uglify({ toplevel: true, 'mangle': { reserved: ['jQuery'] } }))
     .pipe(rename({
       extname: '.min.js',
     }))
+    .pipe(sourcemaps.write())
     .pipe(gulp.dest('./src/static/js/'))
     .pipe(browserSync.stream());
 };
